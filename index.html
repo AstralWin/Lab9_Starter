@@ -69,24 +69,32 @@
     </form>
 
     <section id="error-btns">
-      <button>Console Log</button>
-      <button>Console Error</button>
-      <button>Console Count</button>
-      <button>Console Warn</button>
-      <button>Console Assert</button>
-      <button>Console Clear</button>
-      <button>Console Dir</button>
-      <button>Console dirxml</button>
-      <button>Console Group Start</button>
-      <button>Console Group End</button>
-      <button>Console Table</button>
-      <button>Start Timer</button>
-      <button>End Timer</button>
-      <button>Console Trace</button>
-      <button>Trigger a Global Error</button>
+      <button id="log">Console Log</button>
+      <button id="err">Console Error</button>
+      <button id="count">Console Count</button>
+      <button id="warn">Console Warn</button>
+      <button id="assert">Console Assert</button>
+      <button id="clear">Console Clear</button>
+      <button id="dir">Console Dir</button>
+      <button id="dirxml">Console dirxml</button>
+      <button id="gstart">Console Group Start</button>
+      <button id="gend">Console Group End</button>
+      <button id="table">Console Table</button>
+      <button id="stime">Start Timer</button>
+      <button id="etime">End Timer</button>
+      <button id="trace">Console Trace</button>
+      <button id="global">Trigger a Global Error</button>
     </section>
   </main>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+<script>
+  window.TrackJS && TrackJS.install({ 
+    token: "5985debbadfa45ccad6ad634fdba96f6"
+    // for more configuration options, see https://docs.trackjs.com
+  });
+</script>
+                        
   <script>
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
@@ -102,6 +110,139 @@
 
     // Start your code here
     // You may move this JS to another file if you wish
+   
+    let log = document.querySelector('#log');
+    log.addEventListener('click', () => {
+      console.log("Demo");
+    });
+
+    let err = document.querySelector('#err');
+    err.addEventListener('click', () => {
+      console.error("Demo");
+    });
+
+    let count = document.querySelector('#count');
+    count.addEventListener('click', () => {
+      console.count(count);
+    });
+
+    let warn = document.querySelector('#warn');
+    warn.addEventListener('click', () => {
+      console.warn("This is a warning");
+    });
+
+    const num = 7;
+    const reason = "num was supposed to be 0";
+    let assert = document.querySelector('#assert');
+    assert.addEventListener('click', () => {
+      console.assert(num == 0, {num, reason});
+    });
+
+    let clear = document.querySelector('#clear');
+    clear.addEventListener('click', () => {
+      console.clear();
+    });
+
+    let dir = document.querySelector('#dir');
+    dir.addEventListener('click', () => {
+      console.dir(document.head);
+    });
+
+    let dirxml = document.querySelector('#dirxml');
+    dirxml.addEventListener('click', () => {
+      console.dirxml(document);
+    });
+
+    const label = "Group Start";
+    let gstart = document.querySelector('#gstart');
+    gstart.addEventListener('click', () => {
+      console.group(label);
+    });
+
+    let gend = document.querySelector('#gend');
+    gend.addEventListener('click', () => {
+      console.groupEnd();
+    });
+
+    let scores = [{name: 'Edward', score: 90}, {name: 'Alwin', score: 100},{name: 'Tina', score: 95},]
+    let table = document.querySelector('#table');
+    table.addEventListener('click', () => {
+      console.table(scores);
+    });
+
+    let stime = document.querySelector('#stime');
+    stime.addEventListener('click', () => {
+      console.time();
+    });
+
+    let etime = document.querySelector('#etime');
+    etime.addEventListener('click', () => {
+      console.timeEnd();
+    });
+
+    let trace = document.querySelector('#trace');
+    trace.addEventListener('click', () => {
+      const first = () => { second(); };
+      const second = () => { third(); };
+      const third = () => { fourth(); };
+      const fourth = () => { console.trace(); };
+      first();
+    });
+
+    class ValidationError extends Error {
+      constructor(message) {
+      super(message);
+      this.name = "ValidationError";
+      }
+    }
+
+    function readUser(json) {
+    let user = JSON.parse(json);
+
+    if (!user.age) {
+      throw new ValidationError("No field: age");
+    }
+    if (!user.name) {
+     throw new ValidationError("No field: name");
+    }
+
+    return user;
+   }
+
+    try {
+      let person = readUser('{ "age": 17 }');
+      let logging = document.querySelector('#test');
+      logging.addEventListener('click', () => {
+        console.log('Wont reach here unless we add an element with id test');
+      })
+    } catch (err) {
+        if (err instanceof ValidationError) {
+          console.error(err.message);
+        }
+        else
+          console.error(err);
+    } finally {
+        console.log('we are at the end');
+    }
+
+    var test = {}; 
+    test.registerErrorHandler = function () 
+{    
+    if (window.onerror) // then one exists
+      {
+        console.log("Works");
+      }
+    else
+        console.log('Does not work');
+}
+
+test.registerErrorHandler();
+let gerror = document.querySelector('#global');
+    gerror.addEventListener('click', () => {
+    console.log("Error occurs here");
+    lalala;
+});
+TrackJS.track('Testing TrackJS!');                   
   </script>
 </body>
 
